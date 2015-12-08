@@ -13,6 +13,7 @@ public class Value implements Comparable<Value>{
 	/**
 	 * Method: compareTo Compares Value object based on timestamp
 	 * In order to sort a list of values, the value object should be comparable to another value object.
+	 * @author Deepti Verma
 	 */
 	@Override
 	public int compareTo(Value arg0) {
@@ -25,6 +26,7 @@ public class Value implements Comparable<Value>{
 	
 	/**
 	 * Overriding toString method to print the value and not the value object
+	 * @author Shashank
 	 */
 	public String toString(){
 		return value+"";

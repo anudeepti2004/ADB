@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Queue;
 import java.util.Set;
 
-import edu.nyu.adb.Lock.lockType;
 
 public class TransactionManager {
 	private static BufferedReader br;
@@ -33,6 +32,7 @@ public class TransactionManager {
 	 * Initializes Transaction manager
 	 * @param in
 	 * @param out
+	 * @author Deepti Verma
 	 */
 	public static void init(InputStream in, OutputStream out) {
 		 BufferedInputStream bi=new BufferedInputStream(in);
@@ -49,6 +49,7 @@ public class TransactionManager {
 	/**
 	 * Singleton
 	 * @return the only instance of the transaction manager
+	 * @author Shashank
 	 */
 	public static TransactionManager getInstance(){
 		if(instance==null){
@@ -60,6 +61,7 @@ public class TransactionManager {
 	/**
 	 * Read input commands and execute transactions
 	 * @throws Exception
+	 * @author Deepti Verma
 	 */
 	public void run() throws Exception{
 		String line=null;
@@ -99,6 +101,7 @@ public class TransactionManager {
 	 * @param operation : specifies what operation to perform like begin, read, write, dump, end etc
 	 * @return true- if operation was successfully executed, otherwise false
 	 * @throws Exception
+	 * @author Deepti Verma
 	 */
 	private boolean doOperation(String operation) throws Exception {
 		//Start Read-only transaction
@@ -194,7 +197,8 @@ public class TransactionManager {
 	 * @param t
 	 * @param dataItem
 	 * @return Value of data item 
-	 * @throws Exception 
+	 * @throws Exception
+	 * @author Deepti Verma 
 	 */
 	private Integer readDataItem(Transaction t, String dataItem) throws Exception {
 		Site availableSite=getAvailableSiteToReadFrom(dataItem); //Get sites where the dataitem is present
@@ -208,7 +212,7 @@ public class TransactionManager {
 			return availableSite.readOnlyDataItem(dataItem, t.transactionStartTimestamp);
 		}else{
 			//Obtain read-only lock and read data item value
-			if(t.getLock(availableSite,dataItem, lockType.READ_LOCK)){
+			if(t.getLock(availableSite,dataItem, Site.lockType.READ_LOCK)){
 				return availableSite.readDataItem(dataItem);
 			}else{
 				//if we are unable to obtain read only lock add transaction to waiting list
@@ -235,6 +239,7 @@ public class TransactionManager {
 	 * 
 	 * @param dataItem
 	 * @return site from which the data item can be read
+	 * @author Shashank
 	 */
 	private Site getAvailableSiteToReadFrom(String dataItem) {
 		ArrayList<Site> siteList=getSitesContainingAvailableDataitem(dataItem);
@@ -265,7 +270,8 @@ public class TransactionManager {
 	/**
 	 * End transaction 
 	 * @param t - transaction to be ended
-	 * @throws Exception 
+	 * @throws Exception
+	 * @author Shashank 
 	 */
 	private void endTransaction(Transaction t) throws Exception {
 		if(t!=null)
@@ -287,6 +293,7 @@ public class TransactionManager {
 	 * 
 	 * @param dataitem
 	 * @return a list of sites containing a data item
+	 * @author Deepti Verma
 	 */
 	public ArrayList<Site> getSitesContainingDataitem(String dataitem) {
 		ArrayList<Site> sites=new ArrayList<>();
@@ -305,6 +312,7 @@ public class TransactionManager {
 	 * @param value: new value of the data item
 	 * @param operation : write command
 	 * @throws Exception
+	 * @author Deepti Verma
 	 */
 	private void writeToAllSites(Transaction t, String dataItem, int value,String operation) throws Exception {
 		/*if(t.lockOnDataItems.contains(dataItem)){
@@ -312,7 +320,7 @@ public class TransactionManager {
 				s.writeDataItem(dataItem, value,currentTimeStamp);
 			}
 		}else{*/
-			boolean gettingLockSuccessful=t.getLock(dataItem, lockType.WRITE_LOCK);	//obtain lock on data item
+			boolean gettingLockSuccessful=t.getLock(dataItem, Site.lockType.WRITE_LOCK);	//obtain lock on data item
 			if(gettingLockSuccessful){		//if a lock is obtained successfully, write on each site
 				ArrayList<Site> sites=getSitesContainingDataitem(dataItem);		//Get all sites containing the data item
 				if(sites.isEmpty()){ //No sites are up to get a lock
@@ -421,6 +429,7 @@ public class TransactionManager {
 	/**
 	 * Add a new site to the site list to the transaction manager
 	 * @param Site s: to be added to the transaction managers site list
+	 * @author Shashank
 	 */
 	public void addSite(Site s){
 		siteList.add(s);

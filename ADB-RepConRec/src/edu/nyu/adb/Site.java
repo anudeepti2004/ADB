@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import edu.nyu.adb.Lock.lockType;
 
 public class Site {
 	
@@ -22,10 +21,15 @@ public class Site {
 	public int timestampAtWhichSiteFailed; //Maintains the timestamp at which the site failed
 	public int timestampSinceItWasUp; //Maintains the timestamp at which the site was recovered or was last up
 	
+	public static enum lockType{
+		READ_LOCK,WRITE_LOCK;
+	}
+	
 	/**
 	 * Site  - public constructor
 	 * This constructor initializes the Site fields
 	 * @param idNumber : identifier to uniquely identify the Site
+	 * @author Shashank
 	 */
 	public Site(int idNumber){
 		id=idNumber;
@@ -39,7 +43,8 @@ public class Site {
 	/**
 	 * Method failSite is used Simulate a site failure.
 	 * @param timestamp : timestamp at which the site failed
-	 * @throws Exception 
+	 * @throws Exception
+	 * @author Deepti Verma 
 	 */
 	public void failSite(int timestamp) throws Exception{
 		isUp=false; //Set the indicator of whether the site is up to false
@@ -64,6 +69,7 @@ public class Site {
 	/**
 	 * Method recoverSite is used Simulate recovery of a site
 	 * @param timestamp : timestamp at which the site recovers
+	 * @author Deepti Verma
 	 */
 	public void recoverSite(int timestamp){
 		isUp=true; //Set the indicator to true meaning that the site now is up
@@ -88,6 +94,7 @@ public class Site {
 	 * @param t
 	 * @return 	: true if it was successful to gain lock on that dataitem
 	 * 			: false otherwise
+	 * @author Deepti Verma
 	 */
 	public boolean lockDataItem(String dataItem, lockType newlt, Transaction t){
 		if(isUp){
@@ -164,7 +171,8 @@ public class Site {
 	 * The data item has a list of values so compare the transaction timestamp with the timestamp of commit time of the data item
 	 * @param dataItem : data item to be read
 	 * @param timestamp : timestamp of start of the trasanction
-	 * @return value of committed data item whose timestamp is less than the timestamp of the read only transaction  
+	 * @return value of committed data item whose timestamp is less than the timestamp of the read only transaction
+	 * @author Deepti Verma  
 	 */
 	public Integer readOnlyDataItem(String dataItem, int timestamp){
 		ArrayList<Value> diList=dataItems.get(dataItem).valueList; //Get all the values of the dataitem to be read
@@ -185,6 +193,7 @@ public class Site {
 	 * Method readDataItem is used to simulate the read operation on the site for Read-Write Transactions
 	 * @param dataItem : dataitem whose value the transaction wants to read
 	 * @return value of data item
+	 * @author Deepti Verma
 	 */
 	public Integer readDataItem(String dataItem){
 		//If the value is in the buffer (main memory) i.e. it is not yet committed then read from buffer
@@ -203,11 +212,15 @@ public class Site {
 	 * @param dataItem : data item which the transaction intends to write
 	 * @param newData : New value of the data item
 	 * @param timestamp : timestamp of the time when it is written
+	 * @author Deepti Verma
 	 */
 	public void writeDataItem(String dataItem, int newData, int timestamp){
 		dataItemsBufferStorage.put(dataItem,newData);
 	}
 	
+	/**
+	 * @author Shashank
+	 */
 	public String toString(){
 		return id+"";
 	}

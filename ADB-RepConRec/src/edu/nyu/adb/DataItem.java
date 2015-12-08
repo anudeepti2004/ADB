@@ -12,6 +12,7 @@ public class DataItem  {
 	/**
 	 * Data Item Constructor
 	 * Initializes the value list 
+	 * @author Shashank
 	 */
 	public DataItem(){
 		valueList=new ArrayList<>();
@@ -19,7 +20,8 @@ public class DataItem  {
 	
 	/**
 	 * Data Item Overloaded Constructor
-	 * Initializes the value list, dataidentifier, is Replicated and availableForRead 
+	 * Initializes the value list, dataidentifier, is Replicated and availableForRead
+	 * @author Shashank 
 	 */
 	public DataItem(String didentifier,boolean isR, boolean aR){
 		dataIdentifier=didentifier;

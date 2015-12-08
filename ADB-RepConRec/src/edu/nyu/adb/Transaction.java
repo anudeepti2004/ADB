@@ -4,8 +4,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import edu.nyu.adb.Lock.lockType;
-
 public class Transaction {
 
 	//public int transactionId;
@@ -25,6 +23,7 @@ public class Transaction {
 	 * @param name
 	 * @param timestamp
 	 * @param bwTM 
+	 * @author Shashank
 	 */
 	public Transaction(String name,int timestamp, BufferedWriter bwTM){
 		transactionStartTimestamp=timestamp;
@@ -42,8 +41,9 @@ public class Transaction {
 	 * @param dataitem
 	 * @param l
 	 * @return true - if lock is obtained successfully
+	 * @author Deepti Verma
 	 */
-	public boolean getLock(String dataitem, lockType l) {
+	public boolean getLock(String dataitem, Site.lockType l) {
 		ArrayList<Site> sitesContainingDataitem=TransactionManager.getInstance().getSitesContainingDataitem(dataitem);//Get all sites containing the data item
 		boolean successfullyAcquiredAllLocks=true;
 		//get lock on data item on all sites
@@ -67,8 +67,9 @@ public class Transaction {
 	 * @param dataitem
 	 * @param l
 	 * @return true - if lock is obtained successfully
+	 * @author Deepti Verma
 	 */
-	public boolean getLock(Site siteToReadFrom,String dataitem, lockType l) {
+	public boolean getLock(Site siteToReadFrom,String dataitem, Site.lockType l) {
 		boolean successfullyAcquiredAllLocks=true;
 		//	Obtain lock on data item if site is running
 		if(siteToReadFrom.isUp){
@@ -90,7 +91,8 @@ public class Transaction {
 	 * Method abort simulates aborting a transaction and clearing the locks held by that transaction
 	 * Abort a transaction with the reason of why it aborts
 	 * @param whyMessage
-	 * @throws IOException 
+	 * @throws IOException
+	 * @author Deepti Verma 
 	 */
 	public void abort(String whyMessage) throws IOException{
 		for(String dataItem:lockOnDataItems){
@@ -108,6 +110,7 @@ public class Transaction {
 	/**
 	 * Release locks on all data items
 	 * When a transaction ends whether it aborts or commits it will release locks on the data items that the transaction holds
+	 * @author Deepti Verma
 	 */
 	public void releaseLocks() {
 		for(String dataitem:lockOnDataItems){ //Loop through all the data items it has locks on
@@ -120,7 +123,8 @@ public class Transaction {
 	/**
 	 * Commit a transaction
 	 * @param currentTtimestamp : commit timestamp. All the write values in the buffer will be populated at the commit time
-	 * @throws IOException 
+	 * @throws IOException
+	 * @author Deepti Verma 
 	 */
 	public void commit(int currentTtimestamp) throws IOException {
 		for(String dataItem:lockOnDataItems){

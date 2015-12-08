@@ -11,6 +11,7 @@ public class MainProgram {
 	 * Entry point of the application
 	 * @param args : command line arguments
 	 * @throws Exception if the initialization fails or transaction manager fails
+	 * @author Deepti Verma
 	 */
 	public static void main(String[] args) throws Exception{
 		if(args.length > 0){
@@ -33,6 +34,7 @@ public class MainProgram {
 	 * @param in : InputStream either default i.e. Standard input or from a file
 	 * @param out : OutputStream 
 	 * @throws Exception : if the initialization of Transaction manager and Site manager fails then an exception is thrown
+	 * @author Shashank
 	 */
 	public static void init(InputStream in, OutputStream out) throws Exception{
 		try{
@@ -54,6 +56,7 @@ public class MainProgram {
 	/**
 	 * Method initSites() creates 10 sites and initializes their variables and puts the variables in the data items table.
 	 * Even variables are replicated, odd variables are not.
+	 * @author Deepti Verma
 	 */
 	public static void initSites(){
 		for(int i=1;i<=10;i++){ //Creating 10 new sites
