@@ -221,7 +221,8 @@ public class TransactionManager {
 				for(Transaction t1:transactionList){ //check if transaction should be executed according to wait die protocol
 					if(!t1.transactionName.equalsIgnoreCase(t.transactionName) && t1.lockOnDataItems.contains(dataItem)){
 						if(t1.transactionStartTimestamp < t.transactionStartTimestamp){
-							t.abort("Transaction "+t1.transactionName+" is older than "+t.transactionName);
+							t.abort("Transaction "+t1.transactionName+" is older than "+t.transactionName
+									+" and "+t1.transactionName +" holds lock on "+dataItem);
 						}else{
 							t.isWaiting=true;
 							transactionWaitingList.add(t);
@@ -340,7 +341,8 @@ public class TransactionManager {
 						if(!t1.transactionName.equalsIgnoreCase(t.transactionName) && t1.lockOnDataItems.contains(dataItem)){
 							//If the transaction in transaction list having lock on the data item is older than the transaction trying to wrtie then abort the transaction
 							if(t1.transactionStartTimestamp < t.transactionStartTimestamp){ 
-								t.abort("because of wait-die. Transaction "+t1.transactionName+" is older than "+t.transactionName);
+								t.abort("because of wait-die. Transaction "+t1.transactionName+" is older than "+t.transactionName
+										+" and "+t1.transactionName+" holds lock on "+dataItem);
 							}else{	//put transaction in waiting if there is no older transaction holding a lock on the data item
 								//t1.abort("Transaction "+t.transactionName+" is older than "+t1.transactionName);
 								t.isWaiting=true; //Transaction needs to wait as it is older than the transaction holding the lock on the data item

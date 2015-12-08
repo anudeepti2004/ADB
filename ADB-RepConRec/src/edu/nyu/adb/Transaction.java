@@ -98,7 +98,8 @@ public class Transaction {
 		for(String dataItem:lockOnDataItems){
 			ArrayList<Site> sitesAccessed=TransactionManager.getInstance().getSitesContainingDataitem(dataItem);
 			for(Site s: sitesAccessed){
-				s.dataItemsBufferStorage.remove(dataItem); // If the transaction wrote a value to a site clear the buffer for that dataitem
+				if(s.dataItemsBufferStorage.containsKey(dataItem))
+					s.dataItemsBufferStorage.remove(dataItem); // If the transaction wrote a value to a site clear the buffer for that dataitem
 			}
 		}
 		releaseLocks(); //Release the locks held by the transaction
@@ -156,5 +157,8 @@ public class Transaction {
 		isRunning=false;
 		bw.write("Commiting transaction "+transactionName+"\n");
 		bw.flush();
+	}
+	public String toString(){
+		return this.transactionName+"";
 	}
 }

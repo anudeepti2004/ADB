@@ -64,6 +64,7 @@ public class Site {
 			t2.abort("Site "+this.id+" failed.");	//Abort transactions due to site failure
 		}
 		lockTable.clear(); //Clearing the lock tables in the event of a failure
+		dataItemsBufferStorage.clear(); //Clearing local buffer too
 	}
 	
 	/**
