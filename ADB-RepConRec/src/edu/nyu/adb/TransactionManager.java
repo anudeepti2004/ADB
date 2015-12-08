@@ -32,7 +32,7 @@ public class TransactionManager {
 	 * Initializes Transaction manager
 	 * @param in
 	 * @param out
-	 * @author Deepti Verma
+	 * @author Shashank
 	 */
 	public static void init(InputStream in, OutputStream out) {
 		 BufferedInputStream bi=new BufferedInputStream(in);
@@ -256,6 +256,7 @@ public class TransactionManager {
 	 * 
 	 * @param dataItem
 	 * @return list of sites containing the data item available for read 
+	 * @author Shashank
 	 */
 	private ArrayList<Site> getSitesContainingAvailableDataitem(String dataItem) {
 		ArrayList<Site> sites=new ArrayList<>();
