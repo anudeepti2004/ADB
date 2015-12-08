@@ -115,7 +115,17 @@ public class Transaction {
 	public void releaseLocks() {
 		for(String dataitem:lockOnDataItems){ //Loop through all the data items it has locks on
 			for(Site s: sitesAccessed){
-				s.lockTable.remove(dataitem); //Remove the locks from the lock table
+				boolean removeDataItem=false;
+				if(s.lockTable.containsKey(dataitem)){
+						for(Site.lockType lt:s.lockTable.get(dataitem).keySet()){
+							s.lockTable.get(dataitem).get(lt).remove(this);
+							if(s.lockTable.get(dataitem).get(lt).isEmpty()){
+								removeDataItem=true;
+							}
+						}
+				if(removeDataItem)
+					s.lockTable.remove(dataitem); //Remove the locks from the lock table
+				}
 			}
 		}
 	}

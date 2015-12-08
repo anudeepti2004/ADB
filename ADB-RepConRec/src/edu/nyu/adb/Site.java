@@ -104,57 +104,52 @@ public class Site {
 				for(lockType ltOnDataItem:lockTypeOnDataItem.keySet()){
 					//If there is a read lock on the data item and new lock is write lock then change the lock type
 					if(ltOnDataItem==lockType.READ_LOCK && newlt==lockType.WRITE_LOCK){
-						for(Transaction alreadyHoldingLocksTransaction:lockTypeOnDataItem.get(ltOnDataItem)){
-							//if same transaction earlier had a read lock on the data item, change lock type
-							if(t.transactionName.equalsIgnoreCase(alreadyHoldingLocksTransaction.transactionName)){
+						if(lockTypeOnDataItem.get(ltOnDataItem).contains(t)){
+							if(lockTypeOnDataItem.get(ltOnDataItem).size()==1){
+								//This means that only 1 transaction is holding read lock on the data item so change to exclusive lock and return
+								//if same transaction earlier had a read lock on the data item, change lock type
 								HashMap<lockType, ArrayList<Transaction>> newMap=new HashMap<>();
 								newMap.put(newlt, new ArrayList<Transaction>());
 								newMap.get(newlt).add(t);
 								lockTable.put(dataItem, newMap);
 								return true;
 							}else{
+								//That means there are more than 1 transaction holding read locks on the data item so return false
 								return false;
 							}
-						}
+						}else
+							return false; //If the transaction is not part of the read list that means it is new transaction trying to get a write lock
 					//if old and new lock type was a read lock
 					}else if(ltOnDataItem==lockType.READ_LOCK && newlt==lockType.READ_LOCK){
-						for(Transaction alreadyHoldingLocksTransaction:lockTypeOnDataItem.get(ltOnDataItem)){
-							//for same transaction do nothing
-							if(t.transactionName.equalsIgnoreCase(alreadyHoldingLocksTransaction.transactionName)){
-								return true;
-							}else{
-								//for a different transaction, add lock to locktable
-								HashMap<lockType, ArrayList<Transaction>> newMap=lockTable.get(dataItem);
-								newMap.get(newlt).add(t);
-								lockTable.put(dataItem, newMap);
-								return true;
-							}
+						if(lockTypeOnDataItem.get(ltOnDataItem).contains(t)){
+							return true;
+						}else{
+							//for a different transaction, add lock to locktable
+							HashMap<lockType, ArrayList<Transaction>> newMap=lockTable.get(dataItem);
+							newMap.get(newlt).add(t);
+							lockTable.put(dataItem, newMap);
+							return true;
 						}
 					//if old and new lock type is write lock 
 					}else if(ltOnDataItem==lockType.WRITE_LOCK && newlt==lockType.WRITE_LOCK){
-						for(Transaction alreadyHoldingLocksTransaction:lockTypeOnDataItem.get(ltOnDataItem)){
+						if(lockTypeOnDataItem.get(ltOnDataItem).contains(t)){
 							//if write lock is required by same transaction which was earlier holding the lock return true
-							if(t.transactionName.equalsIgnoreCase(alreadyHoldingLocksTransaction.transactionName)){
-								return true;
-							}else{
-								//else return false, as write locks conflict
-								return false;
-							}
+							return true;
+						}else{
+							//else return false, as write locks conflict
+							return false;
 						}
 					//if old lock on data item was write lock, and nwe lock type is read lock 
 					}else if(ltOnDataItem==lockType.WRITE_LOCK && newlt==lockType.READ_LOCK){
-						for(Transaction alreadyHoldingLocksTransaction:lockTypeOnDataItem.get(ltOnDataItem)){
-							//if write lock was by same transaction, return true
-							if(t.transactionName.equalsIgnoreCase(alreadyHoldingLocksTransaction.transactionName)){
-								return true;
-							}else{
+						if(lockTypeOnDataItem.get(ltOnDataItem).contains(t)){//if write lock was by same transaction, return true
+							return true;
+						}else{
 								//if write lock was by another transaction, return false
 								return false;
-							}
 						}
 					}
 				}
-			//if there is no previous lock on the data item
+			//if there are no previous lock on the data item
 			}else{
 				HashMap<lockType, ArrayList<Transaction>> newMap=new HashMap<>();
 				newMap.put(newlt, new ArrayList<Transaction>());
